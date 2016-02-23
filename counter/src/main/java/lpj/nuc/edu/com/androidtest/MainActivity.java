@@ -29,6 +29,11 @@ public class MainActivity extends Activity implements OnClickListener {
     Button btn_clear;
     Button btn_del;
 
+    Button btn_sin;
+    Button btn_cos;
+    Button btn_tan;
+    Button btn_squ;
+
     EditText et_showview;
     boolean needclear;
 
@@ -55,6 +60,12 @@ public class MainActivity extends Activity implements OnClickListener {
 
         btn_clear = (Button) findViewById(R.id.btn_clear);
         btn_del = (Button) findViewById(R.id.btn_del);
+
+        btn_sin = (Button) findViewById(R.id.btn_sin);
+        btn_cos = (Button) findViewById(R.id.btn_cos);
+        btn_tan = (Button) findViewById(R.id.btn_tan);
+        btn_squ = (Button) findViewById(R.id.btn_square);
+
         et_showview = (EditText) findViewById(R.id.et_showview);
 
         btn_0.setOnClickListener(this);
@@ -77,6 +88,11 @@ public class MainActivity extends Activity implements OnClickListener {
 
         btn_clear.setOnClickListener(this);
         btn_del.setOnClickListener(this);
+
+        btn_sin.setOnClickListener(this);
+        btn_cos.setOnClickListener(this);
+        btn_tan.setOnClickListener(this);
+        btn_squ.setOnClickListener(this);
     }
 
     @Override
@@ -106,6 +122,10 @@ public class MainActivity extends Activity implements OnClickListener {
             case R.id.btn_minus:
             case R.id.btn_multiply:
             case R.id.btn_divide:
+            case R.id.btn_sin:
+            case R.id.btn_cos:
+            case R.id.btn_tan:
+            case R.id.btn_square:
                 if (needclear) {
                     needclear = false;
                     str = "";
@@ -164,6 +184,22 @@ public class MainActivity extends Activity implements OnClickListener {
                 } else {
                     r = arg1 / arg2;
                 }
+            } else if (op.equals("sin")){
+
+            } else if (op.equals("cos")){
+
+            } else if (op.equals("tan")){
+
+            } else if (op.equals("^2")){
+                r = arg1 * arg1;
+            }else if (op.equals("sin")){
+
+            } else if (op.equals("cos")){
+
+            } else if (op.equals("tan")){
+
+            } else if (op.equals("^2")){
+                r = arg1 * arg1;
             }
             if (!s1.contains(".") && !s2.contains(".") && !op.equals("/")) {
                 int result = (int) r;
@@ -182,6 +218,14 @@ public class MainActivity extends Activity implements OnClickListener {
             } else if (op.equals("*")) {
                 r = 0;
             } else if (op.equals("/")) {
+                r = 0;
+            } else if (op.equals("sin")){
+
+            } else if (op.equals("cos")){
+
+            } else if (op.equals("tan")){
+
+            } else if (op.equals("^2")){
                 r = 0;
             }
             if (!s1.contains(".") && !s2.contains(".")) {
