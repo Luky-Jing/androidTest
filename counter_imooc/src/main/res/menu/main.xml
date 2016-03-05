@@ -4,5 +4,12 @@
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"/>
+        <!--orderInCategory表明摆放的顺序，不一定从0还是计算，但必须大于等于0，数值小的位于前，如果数值一样，在我-->
+    <!--们这个例子中3又两个值，则安顺序摆放，此相当于menu.add()中的第三个参数order。当然我们建议从0，1，2，3....-->
+    <!--这样依次给出，并且与XML行文的顺序一致。 -->
+    <!--Item由android:orderInCategory来设置item的顺序，在Group中我们可以通过menuCategory来设置另一个category，-->
+    <!--里面的顺序和default Category是不方在一起比较，例如这里么我们给出0和5，如图所示，在显示完default Category，-->
+    <!--再显示这个sendonary的内容。-->
+
 
 </menu>

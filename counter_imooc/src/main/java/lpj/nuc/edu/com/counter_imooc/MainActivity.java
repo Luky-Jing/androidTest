@@ -15,9 +15,9 @@ import java.util.StringTokenizer;
 
 public class MainActivity extends Activity {
     // 定义变量
-    private Button[] btn = new Button[10];// 0~9十个数字
-    private EditText input;// 用于显示输出结果
-    private TextView mem, _drg, tip;
+    private Button[] btn = new Button[10];
+    private EditText input;
+    private TextView mem, _drg, tip;    //角度
     private Button div, mul, sub, add, equal, sin, cos, tan, log, ln, sqrt,
             square, factorial, bksp, left, right, dot, exit, drg, mc, c;
     public String str_old;
@@ -38,16 +38,12 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
-    /**
-     * 初始化所有的组件
-     */
+
     private void InitWigdet() {
-        // 获取界面元素
         input = (EditText) findViewById(R.id.input);
         mem = (TextView) findViewById(R.id.mem);
         tip = (TextView) findViewById(R.id.tip);
@@ -85,15 +81,10 @@ public class MainActivity extends Activity {
         c = (Button) findViewById(R.id.c);
     }
 
-    /**
-     * 为所有按键绑定监听器
-     */
     private void AllWigdetListener() {
-        // 数字键
         for (int i = 0; i < 10; i++) {
             btn[i].setOnClickListener(actionPerformed);
         }
-        // 为+-x÷等按键绑定监听器
         div.setOnClickListener(actionPerformed);
         mul.setOnClickListener(actionPerformed);
         sub.setOnClickListener(actionPerformed);
@@ -132,7 +123,6 @@ public class MainActivity extends Activity {
             // 检测输入是否合法
             if (equals_flag == false
                     && "0123456789.()sincostanlnlogn!+-×÷√^".indexOf(command) != -1) {
-                // 检测显示器上的字符串是否合法
                 if (right(str)) {
                     if ("+-×÷√^)".indexOf(command) != -1) {
                         for (int i = 0; i < str.length(); i++) {
@@ -283,13 +273,6 @@ public class MainActivity extends Activity {
 
     };
 
-    /*
-     * 检测函数，对str进行前后语法检测 为Tip的提示方式提供依据，与TipShow()配合使用 编号 字符 其后可以跟随的合法字符 1 （
-     * 数字|（|-|.|函数 2 ） 算符|）|√ ^ 3 . 数字|算符|）|√ ^ 4 数字 .|数字|算符|）|√ ^ 5 算符
-     * 数字|（|.|函数 6 √ ^ （ |. | 数字 7 函数 数字|（|.
-     *
-     * 小数点前后均可省略，表示0 数字第一位可以为0
-     */
     private void TipChecker(String tipcommand1, String tipcommand2) {
 
         // Tipcode1表示错误类型，Tipcode2表示名词解释类型
@@ -495,9 +478,7 @@ public class MainActivity extends Activity {
 
     }
 
-    /*
-     * 反馈Tip信息，加强人机交互，与TipChecker()配合使用
-     */
+    //帮助
     private void TipShow(int bracket, int tipcode1, int tipcode2,
                          String tipcommand1, String tipcommand2) {
 
@@ -611,11 +592,7 @@ public class MainActivity extends Activity {
         vbegin = false;
     }
 
-    /*
-     * 检测函数，返回值为3、2、1 表示应当一次删除几个？ Three+Two+One = TTO 为Bksp按钮的删除方式提供依据
-     * 返回3，表示str尾部为sin、cos、tan、log中的一个，应当一次删除3个 返回2，表示str尾部为ln、n!中的一个，应当一次删除2个
-     * 返回1，表示为除返回3、2外的所有情况，只需删除一个（包含非法字符时要另外考虑：应清屏）
-     */
+    //按键的功能
     private int TTO(String str) {
         if ((str.charAt(str.length() - 1) == 'n'
                 && str.charAt(str.length() - 2) == 'i' && str.charAt(str
@@ -640,11 +617,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    /*
-     * 判断一个str是否是合法的，返回值为true、false
-     * 只包含0123456789.()sincostanlnlogn!+-×÷√^的是合法的str，返回true
-     * 包含了除0123456789.()sincostanlnlogn!+-×÷√^以外的字符的str为非法的，返回false
-     */
+    //判断输入是否正确
     private boolean right(String str) {
         int i = 0;
         for (i = 0; i < str.length(); i++) {
@@ -672,16 +645,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    /*
-     * 整个计算核心，
-     * 只要将表达式的整个字符串传入calc().process()就可以实行计算了 算法包括以下几部分：
-     *  1、计算部分
-     * process(String str) 当然，这是建立在查错无错误的情况下
-     * 2、数据格式化 FP(double n) 使数据有相当的精确度
-     * 3、阶乘算法 N(double n) 计算n!，将结果返回
-     *  4、错误提示 showError(int code ,String str)
-     * 将错误返回
-     */
+    //算法
     public class calc {
 
         public calc() {
@@ -690,23 +654,8 @@ public class MainActivity extends Activity {
 
         final int MAXLEN = 500;
 
-        /*
-         * 计算表达式 从左向右扫描，数字入number栈，运算符入operator栈
-         * +-基本优先级为1，
-         * ×÷基本优先级为2，
-         * log ln sin cos tan n!基本优先级为3，
-         * √^基本优先级为4
-         * 括号内层运算符比外层同级运算符优先级高4
-         * 当前运算符优先级高于栈顶压栈，
-         * 低于栈顶弹出一个运算符与两个数进行运算
-         *  重复直到当前运算符大于栈顶
-         *   扫描完后对剩下的运算符与数字依次计算
-         */
         public void process(String str) {
             int weightPlus = 0, topOp = 0, topNum = 0, flag = 1, weightTemp = 0;
-            // weightPlus为同一（）下的基本优先级，weightTemp临时记录优先级的变化
-            // topOp为weight[]，operator[]的计数器；topNum为number[]的计数器
-            // flag为正负数的计数器，1为正数，-1为负数
             int weight[]; // 保存operator栈中运算符的优先级，以topOp计数
             double number[]; // 保存数字，以topNum计数
             char ch, ch_gai, operator[];// operator[]保存运算符，以topOp计数
@@ -1036,33 +985,24 @@ public class MainActivity extends Activity {
             mem.setText(str_old + "=" + String.valueOf(FP(number[0])));
         }
 
-        /*
-         * FP = floating point 控制小数位数，达到精度 否则会出现
-         * 0.6-0.2=0.39999999999999997的情况，用FP即可解决，使得数为0.4 本格式精度为15位
-         */
+        //DecimalFormat 是 NumberFormat 的一个具体子类，用于格式化十进制数字。
+        //http://baike.baidu.com/view/15161062.htm
         public double FP(double n) {
-            // NumberFormat format=NumberFormat.getInstance(); //创建一个格式化类f
-            // format.setMaximumFractionDigits(18); //设置小数位的格式
             DecimalFormat format = new DecimalFormat("0.#############");
             return Double.parseDouble(format.format(n));
         }
 
-        /*
-         * 阶乘算法
-         */
+        //阶乘
         public double N(double n) {
             int i = 0;
             double sum = 1;
-            // 依次将小于等于n的值相乘
             for (i = 1; i <= n; i++) {
                 sum = sum * i;
             }
             return sum;
         }
 
-        /*
-         * 错误提示，按了"="之后，若计算式在process()过程中，出现错误，则进行提示
-         */
+        //错误提示
         public void showError(int code, String str) {
             String message = "";
             switch (code) {
